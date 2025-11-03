@@ -6,40 +6,40 @@
 <title>大乘壇經｜學員線上題目複習雲端版 — 大型易讀</title>
 <style>
 :root{
-  --bg:#fbf8f4;
-  --card:#fffefc;
-  --ink:#111318;
-  --muted:#595959;
-  --brand:#6b4b2f;
+  --bg:#ffffff;
+  --card:#ffffff;
+  --ink:#0b2330;
+  --muted:#6b7a85;
+  --primary:#0a66ff;
+  --primary-600:#0752d1;
   --ok:#18794a;
   --bad:#9b2f2f;
-  --line:#e9e4dc;
-  --radius:16px;
-  --pad-vert:16px;
-  --pad-horz:18px;
+  --line:#e6eefc;
+  --radius:14px;
+  --pad-vert:14px;
+  --pad-horz:16px;
   --base-font: "Noto Sans TC", -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
 }
-
 *{box-sizing:border-box}
 body{margin:0;font-family:var(--base-font);background:var(--bg);color:var(--ink);
-  font-size:20px; line-height:1.8; -webkit-font-smoothing:antialiased; padding:20px 0;}
-.wrap{max-width:920px;margin:0 auto;padding:0 18px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:0 8px 20px rgba(17,19,24,0.04);margin-bottom:14px}
-h1{margin:0 0 8px;font-size:30px}
+  font-size:22px; line-height:1.8; -webkit-font-smoothing:antialiased; padding:20px 0;}
+.wrap{max-width:980px;margin:0 auto;padding:0 18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:0 10px 26px rgba(11,34,48,0.04);margin-bottom:16px}
+h1{margin:0 0 8px;font-size:34px;color:var(--primary-600)}
 .sub{color:var(--muted);font-size:16px}
 .row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
-button,select{border:1px solid var(--line);border-radius:12px;padding:var(--pad-vert) var(--pad-horz);background:#fff;color:var(--ink);font-size:18px;cursor:pointer;min-height:52px}
-.btn.brand{background:linear-gradient(180deg, rgba(107,75,47,0.06), transparent);border-color:rgba(107,75,47,0.14);color:var(--brand);font-weight:600}
+button,select{border:1px solid var(--line);border-radius:12px;padding:var(--pad-vert) var(--pad-horz);background:#fff;color:var(--ink);font-size:20px;cursor:pointer;min-height:56px}
+.btn.brand{background:linear-gradient(180deg, rgba(10,102,255,0.06), transparent);border-color:rgba(10,102,255,0.12);color:var(--primary);font-weight:700}
 .btn.ghost{background:#fff}
 .btn.warn{background:linear-gradient(180deg, rgba(155,47,47,0.04), transparent);border-color:rgba(155,47,47,0.12);color:var(--bad)}
-.badge{background:#fffaf6;border:1px solid var(--line);border-radius:12px;padding:10px 14px;font-size:18px;min-height:48px}
+.badge{background:#fbfbff;border:1px solid var(--line);border-radius:12px;padding:12px 16px;font-size:18px;min-height:48px}
 .hr{height:1px;background:var(--line);margin:16px 0;border-radius:2px}
-.question{font-size:26px;line-height:1.9;margin:12px 0 14px}
-.s-optBox{display:flex;flex-direction:column;gap:10px}
-.opt{display:flex;align-items:flex-start;gap:14px;border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:4px 0;font-size:20px;background:#fff;min-height:64px;cursor:pointer;transition:transform .06s}
+.question{font-size:28px;line-height:1.9;margin:12px 0 14px}
+.s-optBox{display:flex;flex-direction:column;gap:12px}
+.opt{display:flex;align-items:flex-start;gap:14px;border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:6px 0;font-size:20px;background:#fff;min-height:68px;cursor:pointer}
 .opt:hover{transform:translateY(-1px)}
-.opt input{width:24px;height:24px;margin-top:6px}
-.opt.correct{border-color:rgba(24,121,74,0.16);background:rgba(24,121,74,0.04)}
+.opt input{width:28px;height:28px;margin-top:6px}
+.opt.correct{border-color:rgba(10,102,255,0.12);background:rgba(10,102,255,0.03)}
 .opt.wrong{border-color:rgba(155,47,47,0.12);background:rgba(155,47,47,0.03)}
 .feedback{margin-top:12px;border:1px solid var(--line);border-radius:10px;padding:12px;font-size:18px;background:#fffaf6}
 .feedback.ok{color:var(--ok)}.feedback.bad{color:var(--bad)}
@@ -50,7 +50,26 @@ button,select{border:1px solid var(--line);border-radius:12px;padding:var(--pad-
 .chip input{width:22px;height:22px}
 .report{margin-top:14px;border:1px solid var(--line);background:#fff;border-radius:12px;padding:16px}
 .report h3{margin:0 0 8px;font-size:20px}
-@media(max-width:720px){body{font-size:19px}.question{font-size:24px}.opt{font-size:18px;min-height:58px}}
+@media(max-width:720px){body{font-size:20px}.question{font-size:24px}.opt{font-size:18px;min-height:58px}}
+
+/* --- 高齡友善：大按鈕 / 圓形導航 --- */
+.nav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:20px}
+.nav-center{flex:1;text-align:center;color:var(--muted);font-size:18px}
+
+.round-nav{width:74px;height:74px;border-radius:50%;border:none;background:linear-gradient(180deg,#fff,#eef6ff);color:var(--primary-600);display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:20px;box-shadow:0 8px 18px rgba(10,102,255,0.08);cursor:pointer;transition:transform .12s ease,box-shadow .12s ease}
+.round-nav.primary{background:linear-gradient(180deg,var(--primary),var(--primary-600));color:#fff;box-shadow:0 14px 30px rgba(10,102,255,0.18)}
+.round-nav:hover{transform:translateY(-3px);box-shadow:0 18px 36px rgba(11,34,48,0.12)}
+.round-nav:active{transform:translateY(0)}
+.round-nav:focus{outline:none;box-shadow:0 0 0 6px rgba(10,102,255,0.12)}
+
+/* 更大點擊範圍與說明文字 */
+.nav .btn-text{display:block;font-size:16px;color:var(--ink);margin-top:6px}
+
+/* 在小螢幕時按鈕稍小 */
+@media(max-width:520px){.round-nav{width:64px;height:64px;font-size:18px}.nav-center{font-size:16px}}
+
+/* 隱藏但可被讀屏器讀取的文字 */
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 </style>
 </head>
 <body>
@@ -116,8 +135,9 @@ function mountStudent(selector){
       <div class="s-fbExp"></div>
     </div>
     <div class="nav">
-      <button class="btn s-prev">← 上一題</button>
-      <button class="btn s-next">下一題 →</button>
+      <button class="round-nav s-prev" aria-label="上一題" title="上一題" type="button">←</button>
+      <div class="nav-center"><span class="sr-only">題號</span><span class="question-index">第 <strong class="s-idx">0</strong> 題 / <strong class="s-total-display">0</strong></span></div>
+      <button class="round-nav primary s-next" aria-label="下一題" title="下一題" type="button">→</button>
     </div>
     <div class="report hidden s-report"></div>
   `;
@@ -126,11 +146,13 @@ function mountStudent(selector){
 
   renderSections(el);
   el.querySelector('.s-total').textContent=BANK.length;
+  // 更新 nav 內顯示的總題數
+  el.querySelector('.s-total-display').textContent = '0';
   adjustCount(el);
 
   el.querySelector('.s-start').onclick=()=>start(el);
   el.querySelector('.s-reset').onclick=()=>reset(el);
-  el.querySelector('.s-prev').onclick=()=>{ if(state.idx>0){state.idx--; render(el);} };
+  el.querySelector('.s-prev').onclick=()=>{ if(state.idx>0){state.idx--; render(el); } else { /* 震動提示或語音提示可以在此加入 */ } };
   // 最後一題按「下一題」→ 提示完成 + 顯示成績
   el.querySelector('.s-next').onclick=()=>{
     if(state.idx < state.paper.length-1){ state.idx++; render(el); }
@@ -166,6 +188,9 @@ function start(root){
   root.querySelector('.s-fb').style.display='none';
   root.querySelector('.s-report').classList.add('hidden');
   root.querySelector('.s-finish').disabled=false;
+  // 更新 nav 顯示
+  root.querySelector('.s-idx').textContent = st.idx+1;
+  root.querySelector('.s-total-display').textContent = st.paper.length;
   render(root);
 }
 function reset(root){
@@ -175,6 +200,9 @@ function reset(root){
   root.querySelector('.s-q').textContent=''; root.querySelector('.s-optBox').innerHTML='';
   root.querySelector('.s-fb').style.display='none'; root.querySelector('.s-report').classList.add('hidden');
   root.querySelector('.s-finish').disabled=true;
+  // 更新 nav 顯示
+  const td = root.querySelector('.s-total-display'); if(td) td.textContent = '0';
+  const idx = root.querySelector('.s-idx'); if(idx) idx.textContent = '0';
 }
 
 function render(root){
@@ -184,6 +212,9 @@ function render(root){
   root.querySelector('.s-progress').textContent=`${st.idx+1}/${st.paper.length}`;
   root.querySelector('.s-right').textContent=st.right;
   root.querySelector('.s-q').textContent=q.question||'';
+
+  // 更新 nav 顯示題號
+  const idxEl = root.querySelector('.s-idx'); if(idxEl) idxEl.textContent = st.idx+1;
 
   const box=root.querySelector('.s-optBox'); box.innerHTML='';
   const correct=normalize(q.answer); const isMulti=correct.length>1;
@@ -272,7 +303,7 @@ function showReport(root){
       </div>
       ${wrong.length===0? '<p>太強了！本次無錯題 🎉</p>':
       `<details open><summary>錯題清單（${wrong.length} 題）</summary>
-        <ol>${wrong.map(w=>`<li style="margin:6px 0"><div><b>${w.question}</b></div><div class="sub">你的作答：${w.your}；正解：${w.ans}</div><div class="sub">${w.exp? '解析：'+w.exp:''}</div></li>`).join('')}</ol>
+        <ol>${wrong.map(w=>`<li style="margin:6px 0"><div><b>${w.question}</b></div><div class="sub">你的作答：${w.your}；正解：${w.ans}</div><div class="sub">${w.exp? '解析：'+w.exp: ''}</div></li>`).join('')}</ol>
       </details>`}
     </div>`;
 }
