@@ -47,7 +47,6 @@ body{
   background:var(--card); border:1px solid var(--line); border-radius:16px;
   box-shadow:0 10px 30px rgba(15,23,42,.06); padding:18px;
 }
-.sub{color:var(--muted);font-size:13px}
 
 /* ===== Controls: unify font size ===== */
 .controls, .controls *{font-size:16px}
@@ -62,7 +61,7 @@ button,select{
 .btn.ghost{background:#fff}
 .btn.warn{background:#fff5f5;border-color:#f3dada;color:#b91c1c}
 
-/* Counters / chips */
+/* Chips / badges */
 .badge{
   background:#f1f5f9; border:1px solid var(--line); border-radius:12px;
   padding:8px 12px; margin-right:8px; display:inline-flex; align-items:center;
@@ -97,7 +96,10 @@ button,select{
 .circle-btn svg{width:28px;height:28px;fill:#fff}
 .circle-btn:disabled{opacity:.4;cursor:not-allowed}
 .circle-btn:focus-visible{box-shadow:0 0 0 4px rgba(37,99,235,.25), 0 6px 16px rgba(37,99,235,.25)}
-.nav-hint{color:var(--muted);font-size:14px}
+.nav-hint{color:var(--muted);font-size:14px;text-align:center;width:100%;margin-top:8px}
+
+/* Bottom stats */
+.bottom-stats{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
 
 /* Report */
 .hidden{display:none}
@@ -164,11 +166,6 @@ function mountStudent(selector){
   const el=$(selector);
   el.innerHTML=`
     <div class="row">
-      <div class="badge">共 <b class="s-total">0</b> 題</div>
-      <div class="badge">目前：<b class="s-progress">0/0</b></div>
-      <div class="badge">已答對：<b class="s-right">0</b></div>
-    </div>
-    <div class="row">
       <div>單元主題：</div>
       <div class="chips s-sections"></div>
     </div>
@@ -193,12 +190,21 @@ function mountStudent(selector){
     <!-- 圓形上一題／下一題 -->
     <div class="nav">
       <button class="circle-btn s-prev" aria-label="上一題" title="上一題">
+        <!-- Left chevron -->
         <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true"><path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
       </button>
-      <div class="nav-hint">點擊圓鈕切換題目</div>
       <button class="circle-btn s-next" aria-label="下一題" title="下一題">
-        <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true"><path d="m10 6 1.41 1.41L8.83 10H18v2H8.83l2.58 2.59L10 16l-6-6z"/></svg>
+        <!-- Right chevron (已修正方向) -->
+        <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true"><path d="M8.59 7.41 13.17 12 8.59 16.59 10 18l6-6-6-6-1.41 1.41z"/></svg>
       </button>
+    </div>
+    <div class="nav-hint">點擊圓鈕切換題目</div>
+
+    <!-- ✅ 底部統計搬到這裡 -->
+    <div class="bottom-stats">
+      <div class="badge">共 <b class="s-total">0</b> 題</div>
+      <div class="badge">目前：<b class="s-progress">0/0</b></div>
+      <div class="badge">已答對：<b class="s-right">0</b></div>
     </div>
 
     <div class="report hidden s-report"></div>
@@ -213,7 +219,6 @@ function mountStudent(selector){
   el.querySelector('.s-start').onclick=()=>start(el);
   el.querySelector('.s-reset').onclick=()=>reset(el);
   el.querySelector('.s-prev').onclick=()=>{ if(state.idx>0){state.idx--; render(el);} };
-  // 最後一題按「下一題」→ 提示完成 + 顯示成績
   el.querySelector('.s-next').onclick=()=>{
     if(state.idx < state.paper.length-1){ state.idx++; render(el); }
     else{ alert('本次練習已完成 🎉'); showReport(el); }
