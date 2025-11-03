@@ -1,5 +1,4 @@
-# Write the updated newUI-cathy.html with a blue top banner and unified control fonts
-html = """<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8" />
@@ -25,11 +24,10 @@ body{
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,"Noto Sans TC",sans-serif;
   background:var(--bg);
   color:var(--ink);
-  /* leave room for fixed top bar */
-  padding-top:72px;
+  padding-top:72px; /* leave space for fixed topbar */
 }
 
-/* ===== Top banner (AIbot-style blue bar) ===== */
+/* ===== Top banner (blue bar) ===== */
 .topbar{
   position:fixed;
   inset:0 0 auto 0;
@@ -48,7 +46,7 @@ body{
   padding:0 16px;
   display:flex;
   align-items:center;
-  justify-content:center; /* center the title */
+  justify-content:center;
 }
 .topbar .title{
   font-size:22px;         /* 大型易讀 */
@@ -70,7 +68,7 @@ body{
 h1{margin:0 0 8px;font-size:28px}
 .sub{color:var(--muted);font-size:13px}
 
-/* ===== Controls: unify font size (badges, chips, labels, selects, buttons) ===== */
+/* ===== Controls: unify font size ===== */
 .controls, .controls *{font-size:16px}
 .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 
@@ -132,6 +130,7 @@ button,select{
 .chip input{width:18px;height:18px}
 
 /* Report */
+.hidden{display:none}
 .report{margin-top:14px;border:1px solid var(--line);background:#fff;border-radius:12px;padding:14px}
 .report h3{margin:0 0 10px;font-size:20px}
 .report .meta{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px}
@@ -191,7 +190,7 @@ loadCloudOnce();
 // 學員 UI
 function mountStudent(selector){
   const el=$(selector);
-  el.innerHTML=\`
+  el.innerHTML=`
     <div class="row">
       <div class="badge">共 <b class="s-total">0</b> 題</div>
       <div class="badge">目前：<b class="s-progress">0/0</b></div>
@@ -223,7 +222,7 @@ function mountStudent(selector){
       <button class="btn s-next">下一題 →</button>
     </div>
     <div class="report hidden s-report"></div>
-  \`;
+  `;
   const state={paper:[], idx:0, right:0, user:{}, revealed:{}, firstScored:{}};
   el._state=state;
 
@@ -245,8 +244,8 @@ function refreshStudent(selector){ mountStudent(selector); }
 
 function renderSections(root){
   const secs=[...new Set(BANK.map(q=>q.section||'未分類'))];
-  root.querySelector('.s-sections').innerHTML = secs.map(s=>\`
-    <label class="chip"><input type="checkbox" value="\${s}" checked> \${s}</label>\`).join('');
+  root.querySelector('.s-sections').innerHTML = secs.map(s=>`
+    <label class="chip"><input type="checkbox" value="${s}" checked> ${s}</label>`).join('');
 }
 function adjustCount(root){
   const n=BANK.length;
@@ -264,7 +263,8 @@ function start(root){
 
   let list=(mode==='shuffle')? shuffle(poolIdx) : poolIdx;
   const want=wantStr==='all'? list.length : Math.min(parseInt(wantStr,10), list.length);
-  root._state={paper:list.slice(0,want), idx:0, right:0, user:{}, revealed:{}, firstScored:{}};
+  // ✅ 就地更新 state，避免失效
+  st.paper=list.slice(0,want); st.idx=0; st.right=0; st.user={}; st.revealed={}; st.firstScored={};
 
   root.querySelector('.s-fb').style.display='none';
   root.querySelector('.s-report').classList.add('hidden');
@@ -272,7 +272,8 @@ function start(root){
   render(root);
 }
 function reset(root){
-  root._state={paper:[], idx:0, right:0, user:{}, revealed:{}, firstScored:{}};
+  const st=root._state;
+  st.paper=[]; st.idx=0; st.right=0; st.user={}; st.revealed={}; st.firstScored={};
   root.querySelector('.s-progress').textContent='0/0';
   root.querySelector('.s-right').textContent='0';
   root.querySelector('.s-q').textContent=''; root.querySelector('.s-optBox').innerHTML='';
@@ -284,7 +285,7 @@ function render(root){
   const st=root._state;
   const pi=st.paper[st.idx]; const q=BANK[pi]; if(!q) return;
 
-  root.querySelector('.s-progress').textContent=\`\${st.idx+1}/\${st.paper.length}\`;
+  root.querySelector('.s-progress').textContent=`${st.idx+1}/${st.paper.length}`;
   root.querySelector('.s-right').textContent=st.right;
   root.querySelector('.s-q').textContent=q.question||'';
 
@@ -317,7 +318,7 @@ function render(root){
       }
     });
 
-    const text=document.createElement('div'); text.innerHTML=\`<b>\${String.fromCharCode(65+i)}.</b> \${opt}\`;
+    const text=document.createElement('div'); text.innerHTML=`<b>${String.fromCharCode(65+i)}.</b> ${opt}`;
     row.appendChild(ip); row.appendChild(text); box.appendChild(row);
   });
 
@@ -343,8 +344,8 @@ function showFB(root,q,ok){
   fb.classList.toggle('ok', ok); fb.classList.toggle('bad', !ok);
   root.querySelector('.s-fbTitle').textContent= ok ? '答對了 ✅' : '答錯了 ❌';
   const label=normalize(q.answer).map(i=>String.fromCharCode(65+i)).join(', ');
-  root.querySelector('.s-fbAns').textContent=\`正確答案：\${label}\`;
-  root.querySelector('.s-fbExp').textContent= q.explanation? \`解析：\${q.explanation}\` : '（此題暫無解析）';
+  root.querySelector('.s-fbAns').textContent=`正確答案：${label}`;
+  root.querySelector('.s-fbExp').textContent= q.explanation? `解析：${q.explanation}` : '（此題暫無解析）';
 }
 function hideFB(root){ root.querySelector('.s-fb').style.display='none'; }
 
@@ -364,25 +365,21 @@ function showReport(root){
     }
   });
   const box=root.querySelector('.s-report'); box.classList.remove('hidden');
-  box.innerHTML=\`
+  box.innerHTML=`
     <div class="report">
       <h3>成績報告</h3>
       <div class="meta">
-        <span class="chip">題數：<b>\${total}</b></span>
-        <span class="chip">作答：<b>\${answered}</b></span>
-        <span class="chip">答對：<b>\${right}</b></span>
-        <span class="chip">正確率：<b>\${acc}%</b></span>
+        <span class="chip">題數：<b>${total}</b></span>
+        <span class="chip">作答：<b>${answered}</b></span>
+        <span class="chip">答對：<b>${right}</b></span>
+        <span class="chip">正確率：<b>${acc}%</b></span>
       </div>
-      \${wrong.length===0? '<p>太強了！本次無錯題 🎉</p>':
-      \`<details open><summary>錯題清單（\${wrong.length} 題）</summary>
-        <ol>\${wrong.map(w=>\`<li style="margin:6px 0"><div><b>\${w.question}</b></div><div class="sub">你的作答：\${w.your}；正解：\${w.ans}</div><div class="sub">\${w.exp? '解析：'+w.exp:''}</div></li>\`).join('')}</ol>
-      </details>\`}
-    </div>\`;
+      ${wrong.length===0? '<p>太強了！本次無錯題 🎉</p>':
+      `<details open><summary>錯題清單（${wrong.length} 題）</summary>
+        <ol>${wrong.map(w=>`<li style="margin:6px 0"><div><b>${w.question}</b></div><div class="sub">你的作答：${w.your}；正解：${w.ans}</div><div class="sub">${w.exp? '解析：'+w.exp:''}</div></li>`).join('')}</ol>
+      </details>`}
+    </div>`;
 }
 </script>
 </body>
 </html>
-"""
-with open("/mnt/data/newUI-cathy.html", "w", encoding="utf-8") as f:
-    f.write(html)
-print("Saved to /mnt/data/newUI-cathy.html")
