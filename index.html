@@ -1,41 +1,144 @@
+
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>線上刷題小程序｜雲端唯讀版</title>
+<title>大乘基礎課程(壇經)｜學員線上題目複習雲端版</title>
 <style>
-:root{--bg:#f6f7fb;--card:#fff;--ink:#0f172a;--muted:#64748b;--brand:#3b82f6;--ok:#16a34a;--bad:#ef4444;--line:#e5e7eb}
-*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,"Noto Sans TC",sans-serif;background:var(--bg);color:var(--ink)}
-.wrap{max-width:1000px;margin:24px auto;padding:0 16px}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 10px 30px rgba(15,23,42,.06);padding:18px}
-h1{margin:0 0 8px;font-size:28px}.sub{color:var(--muted);font-size:13px}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-button,select{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff;color:var(--ink);font-size:16px;cursor:pointer}
-.btn.brand{background:var(--brand);border-color:var(--brand);color:#fff}.btn.ghost{background:#fff}
-.badge{background:#f1f5f9;border:1px solid var(--line);border-radius:12px;padding:8px 12px;font-size:16px;margin-right:8px}.hr{height:1px;background:var(--line);margin:14px 0}
+/* ===== Theme ===== */
+:root{
+  --bg:#f6f7fb;
+  --card:#ffffff;
+  --ink:#0f172a;
+  --muted:#64748b;
+  --brand:#2563eb;   /* Topbar blue */
+  --ok:#16a34a;
+  --bad:#ef4444;
+  --line:#e5e7eb;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,"Noto Sans TC",sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  padding-top:72px; /* leave space for fixed topbar */
+}
+
+/* ===== Top banner (blue bar) ===== */
+.topbar{
+  position:fixed; inset:0 0 auto 0; height:64px;
+  background:var(--brand); color:#fff; display:flex; align-items:center;
+  z-index:1000; box-shadow:0 2px 10px rgba(0,0,0,.08);
+}
+.topbar .inner{
+  max-width:1000px; width:100%; margin:0 auto; padding:0 16px;
+  display:flex; align-items:center; justify-content:center; gap:10px;
+}
+.logo{ width:32px;height:32px;border-radius:50%; display:grid;place-items:center; background:rgba(255,255,255,.15) }
+.logo svg{width:20px;height:20px;fill:#fff}
+.topbar .title{ font-size:22px; font-weight:700; letter-spacing:.5px; white-space:nowrap; text-align:center }
+
+/* ===== Layout ===== */
+.wrap{max-width:1000px;margin:24px auto;padding:0 16px}
+.card{
+  background:var(--card); border:1px solid var(--line); border-radius:16px;
+  box-shadow:0 10px 30px rgba(15,23,42,.06); padding:18px;
+}
+
+/* ===== Controls: unify font size ===== */
+.controls, .controls *{font-size:16px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+/* Inputs / buttons */
+button,select{
+  border:1px solid var(--line); border-radius:10px; padding:10px 12px;
+  background:#fff; color:var(--ink); cursor:pointer;
+}
+.btn.brand{background:var(--brand);border-color:var(--brand);color:#fff}
+.btn.ghost{background:#fff}
+.btn.warn{background:#fff5f5;border-color:#f3dada;color:#b91c1c}
+
+/* Chips / badges */
+.badge{
+  background:#f1f5f9; border:1px solid var(--line); border-radius:12px;
+  padding:8px 12px; margin-right:8px; display:inline-flex; align-items:center;
+}
+.hr{height:1px;background:var(--line);margin:14px 0}
+
+/* Question & options */
 .question{font-size:22px;line-height:1.7;margin:8px 0 10px}
-.opt{display:flex;align-items:flex-start;gap:10px;border:1px solid var(--line);border-radius:12px;padding:8px 10px;margin:4px 0;font-size:18px;background:#fff}
-.opt.correct{border-color:var(--ok)}.opt.wrong{border-color:var(--bad)}
-.feedback{margin-top:10px;border:1px solid var(--line);border-radius:10px;padding:10px;font-size:17px;background:#f8fafc}
-.feedback.ok{color:var(--ok)}.feedback.bad{color:var(--bad)}
-.nav{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
-.chips{display:flex;gap:10px;flex-wrap:wrap}.chip{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--line);background:#eef2ff;border-radius:999px;font-size:16px}
-.chip input{width:18px;height:18px}
+.opt{
+  display:flex;align-items:flex-start;gap:10px;
+  border:1px solid var(--line); border-radius:12px;
+  padding:8px 10px;margin:4px 0; font-size:18px;background:#fff
+}
+.opt.correct{border-color:var(--ok)}
+.opt.wrong{border-color:var(--bad)}
+
+/* Feedback */
+.feedback{
+  margin-top:10px;border:1px solid var(--line);
+  border-radius:10px;padding:10px;font-size:17px;background:#f8fafc
+}
+.feedback.ok{color:var(--ok)}
+.feedback.bad{color:var(--bad)}
+
+/* ===== Accessible round pager ===== */
+.nav{ margin-top:16px; display:flex; justify-content:space-between; align-items:center }
+.circle-btn{
+  width:56px;height:56px;border-radius:50%; border:none;
+  background:var(--brand);color:#fff; display:inline-flex;align-items:center;justify-content:center;
+  box-shadow:0 6px 16px rgba(37,99,235,.25); cursor:pointer; outline:none;
+}
+.circle-btn svg{width:28px;height:28px;fill:#fff}
+.circle-btn:disabled{opacity:.4;cursor:not-allowed}
+.circle-btn:focus-visible{box-shadow:0 0 0 4px rgba(37,99,235,.25), 0 6px 16px rgba(37,99,235,.25)}
+.nav-hint{color:var(--muted);font-size:14px;text-align:center;width:100%;margin-top:8px}
+
+/* Bottom stats */
+.bottom-stats{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+
+/* Report */
+.hidden{display:none}
 .report{margin-top:14px;border:1px solid var(--line);background:#fff;border-radius:12px;padding:14px}
-.report h3{margin:0 0 10px;font-size:20px}.report .meta{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px}
-.report .meta .chip{background:#f1f5f9;border:1px solid var(--line);border-radius:999px;padding:8px 12px;font-size:16px}
-.report details{margin:8px 0}.report summary{cursor:pointer;font-size:16px}
-@media(max-width:980px){h1{font-size:24px}.question{font-size:22px}.opt{font-size:18px}}
+.report h3{margin:0 0 10px;font-size:20px}
+.report .meta{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.report .meta .chip{background:#f1f5f9;border:1px solid var(--line);border-radius:999px;padding:8px 12px}
+.report details{margin:8px 0}
+.report summary{cursor:pointer}
+
+/* Responsive */
+@media(max-width:980px){
+  .topbar .title{font-size:18px}
+  .question{font-size:22px}
+  .opt{font-size:18px}
+  .circle-btn{width:48px;height:48px}
+  .circle-btn svg{width:24px;height:24px}
+}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="card">
-    <div class="row" style="justify-content:space-between;align-items:center">
-      <div><h1>線上刷題小程序 <span class="sub">— 雲端唯讀版</span></h1></div>
+  <!-- Top banner with lotus icon -->
+  <div class="topbar">
+    <div class="inner">
+      <div class="logo" aria-hidden="true">
+        <!-- lotus icon (white, fits blue background) -->
+        <svg viewBox="0 0 24 24" role="img" focusable="false">
+          <path d="M12 3c-1.9 2.6-2.7 4.9-2.7 6.9 0 1 .2 1.9.6 2.7-2.2-.3-4.2-1.9-5.6-4.7-1 3.9.4 6.7 3.2 8.4-1.6.2-3 .1-4.3-.3 1.6 3.1 4.1 4.6 7.7 4.6h2.3c3.6 0 6.1-1.5 7.7-4.6-1.3.4-2.7.5-4.3.3 2.8-1.7 4.2-4.5 3.2-8.4-1.4 2.8-3.4 4.4-5.6 4.7.4-.8.6-1.7.6-2.7 0-2-0.8-4.3-2.7-6.9z"/>
+        </svg>
+      </div>
+      <div class="title">大乘基礎課程(壇經)｜學員線上題目複習雲端版</div>
     </div>
   </div>
-  <div class="card" id="panel-student"></div>
-</div>
+
+  <div class="wrap">
+    <!-- 主控制卡片 -->
+    <div class="card controls" id="panel-student"></div>
+  </div>
 
 <script>
 // === 雲端唯讀端點（改成你的【部署 A】/exec） ===
@@ -64,21 +167,16 @@ function mountStudent(selector){
   const el=$(selector);
   el.innerHTML=`
     <div class="row">
-      <div class="badge">共 <b class="s-total">0</b> 題</div>
-      <div class="badge">目前：<b class="s-progress">0/0</b></div>
-      <div class="badge">已答對：<b class="s-right">0</b></div>
-    </div>
-    <div class="row">
-      <div style="font-size:16px">章節：</div>
+      <div>單元主題：</div>
       <div class="chips s-sections"></div>
     </div>
     <div class="row">
-      <label>模式</label>
+      <div>出題模式</div>
       <select class="s-mode"><option value="order">依順序</option><option value="shuffle">隨機</option></select>
-      <label>題數</label>
-      <select class="s-count"><option value="all">全部</option><option>5</option><option selected>10</option><option>20</option><option>50</option></select>
+      <div>練習題數</div>
+      <select class="s-count"><option value="all">100</option selected><option>50</option><option>30</option><option>20</option><option>10</option></select>
       <button class="btn brand s-start">開始作答</button>
-      <button class="btn ghost s-reset">重置</button>
+      <button class="btn ghost s-reset">重新來過</button>
       <button class="btn warn s-finish" disabled>完成並看成績</button>
     </div>
     <div class="hr"></div>
@@ -89,10 +187,27 @@ function mountStudent(selector){
       <div class="s-fbAns"></div>
       <div class="s-fbExp"></div>
     </div>
+
+    <!-- 圓形上一題／下一題 -->
     <div class="nav">
-      <button class="btn s-prev">← 上一題</button>
-      <button class="btn s-next">下一題 →</button>
+      <button class="circle-btn s-prev" aria-label="上一題" title="上一題">
+        <!-- Left chevron -->
+        <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true"><path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+      </button>
+      <button class="circle-btn s-next" aria-label="下一題" title="下一題">
+        <!-- Right chevron (已修正方向) -->
+        <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true"><path d="M8.59 7.41 13.17 12 8.59 16.59 10 18l6-6-6-6-1.41 1.41z"/></svg>
+      </button>
     </div>
+    <div class="nav-hint">點擊圓鈕切換題目</div>
+
+    <!-- ✅ 底部統計搬到這裡 -->
+    <div class="bottom-stats">
+      <div class="badge">共 <b class="s-total">0</b> 題</div>
+      <div class="badge">目前：<b class="s-progress">0/0</b></div>
+      <div class="badge">已答對：<b class="s-right">0</b></div>
+    </div>
+
     <div class="report hidden s-report"></div>
   `;
   const state={paper:[], idx:0, right:0, user:{}, revealed:{}, firstScored:{}};
@@ -105,7 +220,6 @@ function mountStudent(selector){
   el.querySelector('.s-start').onclick=()=>start(el);
   el.querySelector('.s-reset').onclick=()=>reset(el);
   el.querySelector('.s-prev').onclick=()=>{ if(state.idx>0){state.idx--; render(el);} };
-  // 最後一題按「下一題」→ 提示完成 + 顯示成績
   el.querySelector('.s-next').onclick=()=>{
     if(state.idx < state.paper.length-1){ state.idx++; render(el); }
     else{ alert('本次練習已完成 🎉'); showReport(el); }
@@ -143,9 +257,10 @@ function start(root){
   render(root);
 }
 function reset(root){
-  const st=root._state; st.paper=[]; st.idx=0; st.right=0; st.user={}; st.revealed={}; st.firstScored={};
-  root.querySelector('.s-progress').textContent='0/0';
-  root.querySelector('.s-right').textContent='0';
+  const st=root._state;
+  st.paper=[]; st.idx=0; st.right=0; st.user={}; st.revealed={}; st.firstScored={};
+  const p = root.querySelector('.s-progress'); if(p) p.textContent='0/0';
+  const r = root.querySelector('.s-right'); if(r) r.textContent='0';
   root.querySelector('.s-q').textContent=''; root.querySelector('.s-optBox').innerHTML='';
   root.querySelector('.s-fb').style.display='none'; root.querySelector('.s-report').classList.add('hidden');
   root.querySelector('.s-finish').disabled=true;
@@ -155,8 +270,11 @@ function render(root){
   const st=root._state;
   const pi=st.paper[st.idx]; const q=BANK[pi]; if(!q) return;
 
-  root.querySelector('.s-progress').textContent=`${st.idx+1}/${st.paper.length}`;
-  root.querySelector('.s-right').textContent=st.right;
+  const progressEl = root.querySelector('.s-progress');
+  if(progressEl) progressEl.textContent = `${st.idx+1}/${st.paper.length}`;
+  const rightEl = root.querySelector('.s-right');
+  if(rightEl) rightEl.textContent = st.right;
+
   root.querySelector('.s-q').textContent=q.question||'';
 
   const box=root.querySelector('.s-optBox'); box.innerHTML='';
@@ -166,7 +284,7 @@ function render(root){
   (q.options||[]).forEach((opt,i)=>{
     const row=document.createElement('label'); row.className='opt';
     const ip=document.createElement('input'); ip.type=isMulti?'checkbox':'radio'; ip.name=group; ip.value=i;
-    // 回題仍顯示之前選擇
+
     if(isMulti && cur.includes(i)) ip.checked=true;
     if(!isMulti && cur[0]===i) ip.checked=true;
 
@@ -253,5 +371,3 @@ function showReport(root){
 </script>
 </body>
 </html>
-
-
